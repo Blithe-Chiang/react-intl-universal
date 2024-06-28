@@ -43,11 +43,11 @@ class CheckFiles {
                             const filePath = item.filePath;
                             const consolePath = `${filePath}:${item.data.startNode.line}:${item.data.startNode.column}`;
                             if (item.type === NodeConstants.HAS_KEY) {
-                                checkFileService.consolePath(consolePath, item.trans);
+                                checkFileService.consolePath(consolePath, item.trans, item.intlText);
                             } else if (item.type === NodeConstants.NO_KEY) {
                                 checkFileService.consolePath(consolePath, {
                                     [task.configObj.defaultLang]: false,
-                                });
+                                }, item.intlText);
                             }
                         });
                     } else {

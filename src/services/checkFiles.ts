@@ -17,7 +17,7 @@ export default class CheckFile {
             this.task = task;
             this.configObj = this.task.getConfig();
         } else {
-            throw(new Error('必须传入task'));
+            throw (new Error('必须传入task'));
         }
     }
     getStatusText(result: any, checkLangs?: any) {
@@ -37,14 +37,14 @@ export default class CheckFile {
         });
         return text;
     }
-    consolePath(filePath: string, result: any) {
+    consolePath(filePath: string, result: any, intlText?: string) {
         const text = this.getStatusText(result);
         if (text != null) {
             this.consoleIndex++;
         }
-        utils.appendOutputLine(text + ' ' + filePath);
+        utils.appendOutputLine(text + ' ' + filePath + ' ' + `[${intlText}]`);
     }
-    getNodeValue (node: any) {
+    getNodeValue(node: any) {
         var value = '';
         if (node.type === 'TemplateElement') {
             value = node.value.raw;
@@ -64,7 +64,7 @@ export default class CheckFile {
             const intlNode = nodePath.findParent((item: any) => {
                 const node = item.node;
                 if (
-                    node.type ===  "CallExpression"
+                    node.type === "CallExpression"
                     && node.callee.type === "MemberExpression"
                     && configObj.defaultFuncNameReg.test(node.callee.property.name)
                 ) {
@@ -117,12 +117,12 @@ export default class CheckFile {
                                 trans: checkResult
                             });
                         }
-                        
+
                     } else {
-                        throw(new Error('缺少位置信息'));
+                        throw (new Error('缺少位置信息'));
                     }
                 }
-            } else if (nodePath.node.loc){
+            } else if (nodePath.node.loc) {
                 let node = nodePath.node;
                 // 对模板字符串单独处理
                 if (node.type === 'TemplateElement') {
@@ -139,7 +139,7 @@ export default class CheckFile {
                         });
                         if (properties.length > 0) {
                             hasParams = true;
-                            replaceParams = generate.default(t.objectExpression(properties), {compact: true}).code;
+                            replaceParams = generate.default(t.objectExpression(properties), { compact: true }).code;
                         }
                         const replaceTextArr: any = [];
                         node.quasis.forEach((item: any) => {
@@ -171,20 +171,20 @@ export default class CheckFile {
                                     endNode: locNode.end,
                                     replaceParams,
                                     hasParams,
-                                    getMethod: isHtml.test(nodeValue) ? 'getHTML': 'get'
+                                    getMethod: isHtml.test(nodeValue) ? 'getHTML' : 'get'
                                 },
                                 nodePath,
                                 intlText: nodeValue
                             });
                         }
                     } else {
-                        throw(new Error('缺少位置信息'));
+                        throw (new Error('缺少位置信息'));
                     }
                 }
             }
         }
     }
-    checkFile(filepath: any){
+    checkFile(filepath: any) {
         return new Promise((resolve) => {
             if (this.task.getConfig().skipFolderReg.test(filepath)) {
                 resolve([]);
@@ -240,7 +240,7 @@ export default class CheckFile {
                 resolve(ferrors);
             });
         })
-        
+
     }
     async getFiles(srcDir: any) {
         this.consoleIndex = 0;
@@ -268,7 +268,7 @@ export default class CheckFile {
                     utils.appendOutputLine(filename + '分析完毕');
                     utils.showOutput();
                 }
-               
+
             }
             return allerrors;
         })
