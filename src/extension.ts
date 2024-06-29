@@ -14,6 +14,7 @@ import * as vscode from 'vscode';
 import * as actionModules from './actions/codeAction';
 import * as annotationModules from './annotations/checkIntl';
 import * as hoverModules from './hovers/crateIntl';
+import * as codeActionModules from './codeaction/crateIntl';
 import * as customCommands from './commands/index';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -30,9 +31,10 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Hello World!');
 	});
 	Object.values({
-		...actionModules, 
+		...actionModules,
 		...annotationModules,
 		...hoverModules,
+		...codeActionModules,
 		...customCommands
 	}).forEach((module: any) => {
 		module(context);
@@ -41,4 +43,4 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

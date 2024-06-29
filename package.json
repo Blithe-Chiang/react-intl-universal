@@ -27,6 +27,18 @@
         "title": "Check: 文件国际化"
       }
     ],
+    "codeActions": [
+      {
+        "documentSelector": [
+          {
+            "scheme": "file",
+            "pattern": "**/*.{ts,js,tsx,jsx}"
+          }
+        ],
+        "title": "Fix Example Issue",
+        "kind": "quickfix.fixExample"
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "react-intl-universal",
