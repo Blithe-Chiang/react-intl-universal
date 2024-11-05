@@ -229,6 +229,8 @@ export default class CheckFile {
                 if (err) {
                     console.log(err);
                     vscode.window.showWarningMessage(`${utils.name}解析失败` + err.stack);
+                    // FIXME: 临时处理在检查目录的时候某个文件解析失败时导致整个检查的目录都无法继续解析
+                    resolve([])
                     return;
                 }
                 const obj: any = {};
