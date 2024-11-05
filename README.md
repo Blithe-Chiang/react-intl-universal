@@ -298,3 +298,16 @@ uploadLang: (task: any, key: any, text: any, callback: any) => {
 ```
 ## 交流
 钉钉群: 32965438
+
+## 打包方式
+
+- 安装工具
+
+    npm install -g @vscode/vsce
+
+- 打包
+
+    vsce package
+
+### 参考
+ - https://code.visualstudio.com/api/working-with-extensions/publishing-extension
