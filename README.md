@@ -311,3 +311,14 @@ uploadLang: (task: any, key: any, text: any, callback: any) => {
 
 ### 参考
  - https://code.visualstudio.com/api/working-with-extensions/publishing-extension
+
+## 为什么fork？
+
+简单来说：个人比较偏好键盘工作流
+
+相对原版功能有以下的增强：
+
+- 通过命令导航到上一个、下一个多语言问题点
+- 通过code action对多语言问题点进行处理
+- 在检查多语言国际化的时候，输出中显示对应的多语言文字
+
