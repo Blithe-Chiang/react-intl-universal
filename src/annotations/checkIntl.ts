@@ -40,8 +40,8 @@ class CheckAnnotation {
         activeTextEditor.setDecorations(noKeyDecoration, [])
         const filepath = utils.getCurrentFilePath();
         checkFileService.checkFile(filepath).then((data: any) => {
-            const noKeyRanges: any = [];
-            const hasKeyRanges: any = [];
+            const noKeyRanges: {range: vscode.Range}[] = [];
+            const hasKeyRanges: {range: vscode.Range, renderOptions: any}[] = [];
             data.forEach((item: any) => {
                 const range = new vscode.Range(
                     document.positionAt(item.data.start),
@@ -74,11 +74,21 @@ class CheckAnnotation {
                     });
                 }
             });
+            let newRange: vscode.Range[] = []
+            newRange = newRange.concat(hasKeyRanges.map(it => it.range))
+            newRange = newRange.concat(noKeyRanges.map(it => it.range))
+            this.ranges = newRange
             activeTextEditor.setDecorations(hasKeyDecoration, hasKeyRanges)
             activeTextEditor.setDecorations(noKeyDecoration, noKeyRanges)
         })
      }
     init() {
+        this.ctx.subscriptions.push(commands.registerCommand(Commands.JUMP_TO_NEXT, (params) => {
+            jumpToClosestRange("next", this.ranges)
+        }));
+        this.ctx.subscriptions.push(commands.registerCommand(Commands.JUMP_TO_PREV, (params) => {
+            jumpToClosestRange("prev", this.ranges)
+        }));
         this.ctx.subscriptions.push(window.onDidChangeActiveTextEditor(() => {
             this.debounceUpdate();
         }));
@@ -86,8 +96,44 @@ class CheckAnnotation {
             this.debounceUpdate();
         }));
     }
-    
+    ranges: vscode.Range[] = []
 }
+
+
+
+// 跳转到距离最近的范围函数
+function jumpToClosestRange(direction: "prev" | "next", ranges: vscode.Range[]) {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) return;
+  
+    const cursorPosition = editor.selection.active;
+    let closestRange: vscode.Range | undefined;
+  
+    // 过滤掉包含当前光标的 range
+    const validRanges = ranges.filter(range => !range.contains(cursorPosition));
+  
+    if (direction === "prev") {
+      // 查找离光标最近的上一个范围
+      closestRange = validRanges
+        .filter(range => range.end.isBefore(cursorPosition))
+        .reduce((prev, curr) => (!prev || curr.end.isAfter(prev.end) ? curr : prev), undefined as any as vscode.Range);
+    } else {
+      // 查找离光标最近的下一个范围
+      closestRange = validRanges
+        .filter(range => range.start.isAfter(cursorPosition))
+        .reduce((prev, curr) => (!prev || curr.start.isBefore(prev.start) ? curr : prev), undefined as any as vscode.Range);
+    }
+  
+    // 如果找到了最近的范围，则跳转到该范围
+    if (closestRange) {
+      editor.revealRange(closestRange, vscode.TextEditorRevealType.InCenter);
+      editor.selection = new vscode.Selection(closestRange.start, closestRange.start);
+    } else {
+      vscode.window.showInformationMessage(direction === "prev" ? '没有上一个范围了！' : '没有下一个范围了！');
+    }
+  }
+
+
 export const createCheckAnnotation = (ctx: ExtensionContext) => {
     return new CheckAnnotation(ctx).init();
 }
