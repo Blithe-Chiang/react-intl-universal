@@ -95,6 +95,9 @@ class CheckAnnotation {
         this.ctx.subscriptions.push(vscode.workspace.onDidChangeTextDocument(() => {
             this.debounceUpdate();
         }));
+        this.ctx.subscriptions.push(vscode.workspace.onDidOpenTextDocument(() => {
+            this.debounceUpdate();
+        }));
     }
     ranges: vscode.Range[] = []
 }
