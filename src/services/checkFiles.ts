@@ -244,7 +244,7 @@ export default class CheckFile {
         })
 
     }
-    async getFiles(srcDir: any) {
+    async getFiles(srcDir: any, gitChangedFiles?: string[]) {
         this.consoleIndex = 0;
         return readfiles(srcDir, {
             // filter: [
@@ -265,7 +265,15 @@ export default class CheckFile {
                     break;
                 }
                 if (/\.(js|tsx|jsx|ts)$/.test(ext) && !this.configObj.skipFolderReg.test(filename)) {
-                    const errors = await this.checkFile(path.join(srcDir, filename));
+                    const fullName = path.join(srcDir, filename);
+                    // 只处理git变化的文件
+                    if (Array.isArray(gitChangedFiles) && gitChangedFiles.length > 0) {
+                        // 如果不是git变化文件，不做处理
+                        if (!gitChangedFiles.includes(fullName)) {
+                            break;
+                        }
+                    }
+                    const errors = await this.checkFile(fullName);
                     allerrors = allerrors.concat(errors);
                     utils.appendOutputLine(filename + '分析完毕');
                     utils.showOutput();
