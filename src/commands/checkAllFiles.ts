@@ -71,15 +71,27 @@ class CheckFiles {
                         window.showInformationMessage('未选择任何操作');
                         return;
                     }
-                    let gitChangedFiles
+                    let gitChangedFiles: undefined | string[]
                     switch (selectedOption.action) {
                         case 'checkRepo':
                         break;
                         case 'currentChanges':
                             gitChangedFiles = await this.getChangedFiles(dir, "status");
+                            if (gitChangedFiles?.length === 0) {
+                                utils.clearOutput();
+                                utils.appendOutputLine('没有变化');
+                                utils.showOutput();
+                                return
+                            }
                         break;
                         case 'compareHistory':
                             gitChangedFiles = await this.getChangedFiles(dir, "diff");
+                            if (gitChangedFiles?.length === 0) {
+                                utils.clearOutput();
+                                utils.appendOutputLine('没有变化');
+                                utils.showOutput();
+                                return
+                            }
                         break;
                     }
                     checkFileService.getFiles(dir, gitChangedFiles).then(consoleErrors)

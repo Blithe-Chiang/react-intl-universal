@@ -39,11 +39,12 @@ class _GitUtils {
           .map((line) => line.trim())
           .filter((line) => line.length > 0)
           .map((line) => line.slice(3)) // 移除状态代码的前2个字符和1个空格
-          .map((name) => path.resolve(repoRoot, name));
+          .map((name) => path.resolve(repoRoot, name).toUpperCase());
 
+        const _dirPath =dirPath.toUpperCase()
         // 只包含改变的...
         const changedFilesInDir = allChangedFiles.filter((it) =>
-          it.startsWith(dirPath)
+          it.startsWith(_dirPath)
         );
 
         resolve(changedFilesInDir);
@@ -70,7 +71,7 @@ class _GitUtils {
           .split("\n")
           .map((file) => file.trim())
           .filter((file) => file.length > 0) // 过滤空行
-          .map((name) => path.resolve(repoRoot, name));
+          .map((name) => path.resolve(repoRoot, name).toUpperCase());
         resolve(allChangedFiles);
       });
     });

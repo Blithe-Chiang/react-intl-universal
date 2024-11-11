@@ -265,12 +265,13 @@ export default class CheckFile {
                     break;
                 }
                 if (/\.(js|tsx|jsx|ts)$/.test(ext) && !this.configObj.skipFolderReg.test(filename)) {
-                    const fullName = path.join(srcDir, filename);
+                    const fullName: string = path.join(srcDir, filename);
                     // 只处理git变化的文件
                     if (Array.isArray(gitChangedFiles) && gitChangedFiles.length > 0) {
-                        // 如果不是git变化文件，不做处理
-                        if (!gitChangedFiles.includes(fullName)) {
-                            break;
+                        // FIXME: toUpperCase是为了兼容windows 文件路径可能存在的大写问题比如 D:\folder 和 d:\folder
+                        if (!gitChangedFiles.includes(fullName.toUpperCase())) {
+                            // 如果不是git变化文件，不做处理
+                            continue;
                         }
                     }
                     const errors = await this.checkFile(fullName);
