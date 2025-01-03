@@ -6,7 +6,7 @@ import NodeConstants from './constants/node';
 const path = require('path');
 const http = require('request-promise');
 class Utils {
-    publisher = 'rongpingli';
+    publisher = 'jiangzs';
     name = 'react-intl-universal';
     vsConfigFile = vscode.workspace.getConfiguration(this.name);
     lastConfig: any = {};
