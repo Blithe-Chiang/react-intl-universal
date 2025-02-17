@@ -3,7 +3,7 @@
   "publisher": "jiangzs",
   "displayName": "react-intl-universal",
   "description": "react 国际化自动填充插件",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "engines": {
     "vscode": "^1.43.0"
   },

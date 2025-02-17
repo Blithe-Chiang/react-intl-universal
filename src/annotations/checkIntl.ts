@@ -10,13 +10,15 @@ import Task from '../services/Task';
 import CheckFile from '../services/checkFiles';
 const noKeyDecoration = vscode.window.createTextEditorDecorationType(
     {
-        color: 'red'
+        before: {
+            contentText: '🟠',
+        }
     }
 );
 const hasKeyDecoration = vscode.window.createTextEditorDecorationType({
-    opacity: '1',
-    color: 'yellow',
-    borderWidth: '10px'
+    before: {
+        contentText: '🟡',
+    }
 });
 class CheckAnnotation {
     ctx: ExtensionContext;
